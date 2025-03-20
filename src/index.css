@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+    --color-primary: #4880EE;
+    --color-red: #E84118;
+    --color-gray: #DADADA;
+    --color-light-gray: #F2F4F6;
+
+    --color-text-primary: #353C49;
+    --color-text-secondary: #6D7582;
+    --color-text-subtitle: #8D94A0;
+
+    --color-black: #222222;
+    --color-white: #FFFFFF;
+}
+
 html, body {
     height: 100%;
     margin: 0;
