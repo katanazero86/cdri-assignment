@@ -1,42 +1,65 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import Typography from '../../../typography/Typography.tsx';
 import Button from '../../../button/Button.tsx';
+import LikeFill from '../../../../assets/icons/like_fill_icon.svg';
+import LikeLine from '../../../../assets/icons/like_line_icon.svg';
+import { getLocalStorage, setLocalStorage } from '../../../../utils/localStorage.utils.ts';
+import { LOCAL_STORAGE_KEYS } from '../../../../constants/localStorage.constants.ts';
 
 type BookItemProps = Response.BookDocument;
 
-export default function BookItem({
-  price,
-  title,
-  authors,
-  thumbnail,
-  contents,
-  sale_price,
-  url,
-}: BookItemProps) {
+export default function BookItem(props: BookItemProps) {
+  const { price, title, authors, thumbnail, contents, sale_price, url, isbn } = props;
+  const author = `${authors[0]}${authors.length > 1 ? ` 외 ${authors.length}명` : ''}`;
+
+  const [likes, setLikes] = useState<Response.BookDocument[]>([]);
   const [isDetailShow, setIsDetailShow] = useState(false);
 
   const handleDetailClick = () => {
     setIsDetailShow(!isDetailShow);
   };
 
-  const handlePurchaseClick = (targetUrl: string) => {
-    window.open(targetUrl, '_blank');
+  const handleLikeIconClick = () => {
+    const isLiked = likes.some((item) => item.isbn === isbn);
+    let updatedLikes;
+    if (isLiked) {
+      updatedLikes = likes.filter((item) => item.isbn !== isbn);
+    } else {
+      updatedLikes = [...likes, { ...props }];
+    }
+    setLocalStorage(LOCAL_STORAGE_KEYS.LIKE, updatedLikes);
+    setLikes(updatedLikes);
   };
 
-  const author = `${authors[0]}${authors.length > 1 ? ` 외 ${authors.length}명` : ''}`;
+  const handlePurchaseClick = () => {
+    window.open(url, '_blank');
+  };
+
+  useEffect(() => {
+    const targetLikes = getLocalStorage(LOCAL_STORAGE_KEYS.LIKE);
+    if (targetLikes) setLikes(JSON.parse(targetLikes));
+  }, []);
 
   return (
     <li className="flex flex-col p-[16px] border-b border-gray-300">
       {!isDetailShow && (
         <div className="flex items-center">
-          <div>
+          <div className="relative">
             <img
               width={48}
               height={68}
               src={thumbnail || undefined}
               alt={title}
               className="object-cover w-[48px] max-h-[68px] mx-[32px]"
+            />
+            <img
+              width={16}
+              height={16}
+              src={`${likes.some((item) => item.isbn === isbn) ? LikeFill : LikeLine}`}
+              alt={'like-icon'}
+              className="absolute top-0 right-8 cursor-pointer"
+              onClick={handleLikeIconClick}
             />
           </div>
           <div className="flex items-center justify-between basis-[60%] pr-[56px]">
@@ -58,7 +81,7 @@ export default function BookItem({
           </div>
 
           <div className="flex items-center gap-2">
-            <Button label="구매하기" onClick={() => handlePurchaseClick(url)} />
+            <Button label="구매하기" onClick={handlePurchaseClick} />
             <Button
               label="상세보기"
               variant="secondary"
@@ -70,13 +93,23 @@ export default function BookItem({
       )}
       {isDetailShow && (
         <div className="flex">
-          <img
-            width={210}
-            height={280}
-            src={thumbnail || undefined}
-            alt={title}
-            className="object-cover w-[210px] h-[280px] mx-[32px]"
-          />
+          <div className="relative">
+            <img
+              width={210}
+              height={280}
+              src={thumbnail || undefined}
+              alt={title}
+              className="object-cover w-[210px] h-[280px] mx-[32px]"
+            />
+            <img
+              width={24}
+              height={24}
+              src={`${likes.some((item) => item.isbn === isbn) ? LikeFill : LikeLine}`}
+              alt={'like-icon'}
+              className="absolute top-[12px] right-[40px] cursor-pointer"
+              onClick={handleLikeIconClick}
+            />
+          </div>
           <div className="flex flex-col basis-[360px]">
             <div className="flex items-center">
               <Typography
@@ -124,7 +157,7 @@ export default function BookItem({
                   </Typography>
                 )}
               </div>
-              <Button label="구매하기" isFull onClick={() => handlePurchaseClick(url)} />
+              <Button label="구매하기" isFull onClick={handlePurchaseClick} />
             </div>
           </div>
         </div>
