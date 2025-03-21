@@ -46,11 +46,14 @@ export default function BookItem({
               className="flex items-center text-text-primary text-[18px] font-bold"
             >
               <span className="inline-block truncate max-w-[200px] tracking-tighter">{title}</span>
-              <span className="inline-block pl-[16px] text-text-secondary text-[14px] tracking-tighter">
+              <span className="inline-block px-[16px] text-text-secondary text-[14px] tracking-tighter break-all">
                 {author}
               </span>
             </Typography>
-            <Typography as="p" className="text-text-primary text-[18px] w-full max-w-[76px]">
+            <Typography
+              as="p"
+              className="text-text-primary text-[18px] text-right whitespace-normal"
+            >
               {price.toLocaleString()}원
             </Typography>
           </div>
