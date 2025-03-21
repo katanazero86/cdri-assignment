@@ -1,4 +1,4 @@
-import type { InfiniteData } from '@tanstack/react-query'
+import type { InfiniteData } from '@tanstack/react-query';
 import SearchResultText from './searchResultText/SearchResultText.tsx';
 import NoBooks from './noBooks/NoBooks.tsx';
 import BookList from './bookList/BookList.tsx';
