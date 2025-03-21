@@ -1,5 +1,6 @@
 import { Search, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { getLocalStorage, setLocalStorage } from '../../../utils/localStorage.utils.ts';
 
 interface SearchBoxInputProps {
   placeholder?: string;
@@ -34,7 +35,7 @@ export default function SearchBoxInput({
   const removeHistoryItem = (item: string) => {
     const filteredHistory = history.filter((historyItem) => historyItem !== item);
     setHistory(filteredHistory);
-    localStorage.setItem('search', JSON.stringify(filteredHistory));
+    setLocalStorage('search', filteredHistory);
     inputRef.current?.focus();
   };
 
@@ -46,10 +47,10 @@ export default function SearchBoxInput({
           if (!prev.includes(query)) {
             if (prev.length === 8) {
               const newArr = [...prev].slice(1);
-              localStorage.setItem('search', JSON.stringify([...newArr!, query]));
+              setLocalStorage('search', [...newArr!, query]);
               return [...newArr!, query];
             } else {
-              localStorage.setItem('search', JSON.stringify([...prev, query]));
+              setLocalStorage('search', [...prev, query]);
               return [...prev, query];
             }
           } else {
@@ -76,10 +77,8 @@ export default function SearchBoxInput({
   }, []);
 
   useEffect(() => {
-    const targetHistory = localStorage.getItem('search')
-      ? JSON.parse(localStorage.getItem('search')!)
-      : [];
-    setHistory(targetHistory);
+    const targetHistory = getLocalStorage('search');
+    if (targetHistory) setHistory(JSON.parse(targetHistory));
   }, []);
 
   const baseStyle = `w-full text-text-subtitle focus:outline-none ${isFocused ? 'rounded-t-3xl' : 'rounded-full'} bg-light-gray pl-[50px]`;
