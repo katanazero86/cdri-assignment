@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import type { BookDocument } from '../../../../types/book.types.ts';
 import Typography from '../../../typography/Typography.tsx';
 import Button from '../../../button/Button.tsx';
 
-type BookItemProps = BookDocument;
+type BookItemProps = Response.BookDocument;
 
 export default function BookItem({
   price,

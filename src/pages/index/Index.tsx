@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { useBooks } from '../../hooks/useBooks.ts';
 import SearchBox from '../../components/searchBox/SearchBox.tsx';
 import SearchResultBox from '../../components/searchResultBox/SearchResultBox.tsx';
-import { useBooks } from '../../hooks/useBooks.ts';
 import Spinner from '../../components/spinner/Spinner.tsx';
 
 export default function Index() {
@@ -11,6 +11,10 @@ export default function Index() {
   };
 
   const { data, isError, isLoading, fetchNextPage, isFetchingNextPage } = useBooks({ query });
+  if (isError) {
+    console.error('useBooks Error..');
+    // TODO: 에러 핸들링
+  }
 
   return (
     <>

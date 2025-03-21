@@ -1,7 +1,7 @@
-import { Search, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Search, X } from 'lucide-react';
 import { getLocalStorage, setLocalStorage } from '../../../utils/localStorage.utils.ts';
-import {LOCAL_STORAGE_KEYS} from "../../../constants/localStorage.constants.ts";
+import { LOCAL_STORAGE_KEYS } from '../../../constants/localStorage.constants.ts';
 
 interface SearchBoxInputProps {
   placeholder?: string;
@@ -44,22 +44,20 @@ export default function SearchBoxInput({
     if (e.key === 'Enter') {
       if (query !== '') {
         onSearch(query);
-        setHistory((prev) => {
-          if (!prev.includes(query)) {
-            if (prev.length === 8) {
-              const newArr = [...prev].slice(1);
-              setLocalStorage(LOCAL_STORAGE_KEYS.SEARCH, [...newArr!, query]);
-              return [...newArr!, query];
-            } else {
-              setLocalStorage(LOCAL_STORAGE_KEYS.SEARCH, [...prev, query]);
-              return [...prev, query];
-            }
-          } else {
+
+        const updatedHistory = (prev: string[], query: string) => {
+          if (prev.includes(query)) {
             return [...prev];
           }
-        });
-        inputRef.current?.blur();
+
+          return prev.length >= 8 ? [...prev.slice(1), query] : [...prev, query];
+        };
+
+        const newHistory = updatedHistory(history, query);
+        setLocalStorage(LOCAL_STORAGE_KEYS.SEARCH, newHistory);
+        setHistory(newHistory);
         setIsFocused(false);
+        inputRef.current?.blur();
       }
     }
   };

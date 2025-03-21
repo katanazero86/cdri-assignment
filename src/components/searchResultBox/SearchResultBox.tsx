@@ -1,11 +1,11 @@
+import type { InfiniteData } from '@tanstack/react-query'
 import SearchResultText from './searchResultText/SearchResultText.tsx';
 import NoBooks from './noBooks/NoBooks.tsx';
 import BookList from './bookList/BookList.tsx';
-import type { InfiniteBookData } from '../../types/book.types.ts';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver.ts';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver.ts';;
 
 interface SearchResultBoxProps {
-  data: InfiniteBookData;
+  data: InfiniteData<Response.BookResponse> | undefined;
   onFetchNext: VoidFunction;
 }
 

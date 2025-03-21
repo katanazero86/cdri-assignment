@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
-import type { InfiniteBookData } from '../../../types/book.types.ts';
+import { InfiniteData } from '@tanstack/react-query';
 import BookItem from './bookItem/BookItem.tsx';
 
 interface BookListProps {
-  data: InfiniteBookData;
+  data: InfiniteData<Response.BookResponse> | undefined;
 }
 
 export default function BookList({ data }: BookListProps) {
