@@ -17,7 +17,7 @@ export default function Button({
   isFull = false,
   iconRender,
 }: ButtonProps) {
-  const baseStyles = 'rounded-lg cursor-pointer flex items-center';
+  const baseStyles = 'rounded-lg cursor-pointer flex items-center text-center justify-center';
   const variantStyles = {
     primary: 'text-white bg-primary',
     secondary: 'bg-light-gray text-text-secondary',

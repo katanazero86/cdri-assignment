@@ -15,7 +15,7 @@ export default function Index() {
   return (
     <>
       {isLoading && <Spinner />}
-      <section className="w-full max-w-[960px] m-auto pt-[108px] border-dashed border border-indigo-500">
+      <section className="w-full max-w-[960px] m-auto pt-[108px]">
         <SearchBox onSearch={handleSearch} />
         <SearchResultBox data={data} />
       </section>
