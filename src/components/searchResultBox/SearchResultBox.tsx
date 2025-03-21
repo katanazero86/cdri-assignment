@@ -2,12 +2,19 @@ import SearchResultText from './searchResultText/SearchResultText.tsx';
 import NoBooks from './noBooks/NoBooks.tsx';
 import BookList from './bookList/BookList.tsx';
 import type { InfiniteBookData } from '../../types/book.types.ts';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver.ts';
 
 interface SearchResultBoxProps {
   data: InfiniteBookData;
+  onFetchNext: VoidFunction;
 }
 
-export default function SearchResultBox({ data }: SearchResultBoxProps) {
+export default function SearchResultBox({ data, onFetchNext }: SearchResultBoxProps) {
+  const { ref } = useIntersectionObserver(() => {
+    onFetchNext();
+  });
+
+  const isEnd = data?.pages[data.pages.length - 1].meta.is_end ?? false;
   const total = data?.pages[0]?.meta.total_count ?? 0;
   return (
     <div className="pt-[24px]">
@@ -18,6 +25,7 @@ export default function SearchResultBox({ data }: SearchResultBoxProps) {
         </div>
       )}
       {total !== 0 && <BookList data={data} />}
+      {total !== 0 && !isEnd && <div className="w-full h-[100px]" ref={ref}></div>}
     </div>
   );
 }

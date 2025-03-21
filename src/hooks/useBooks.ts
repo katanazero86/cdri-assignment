@@ -26,7 +26,9 @@ export const useBooks = ({ query }: { query: string }) => {
     enabled: query !== '',
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    getNextPageParam: (lastPage, allPages) => null,
-    getPreviousPageParam: (firstPage, allPages) => null,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.meta.is_end === false ? allPages.length + 1 : null;
+    },
+    // getPreviousPageParam: (firstPage, allPages) => null,
   });
 };

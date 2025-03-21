@@ -31,29 +31,30 @@ export default function BookItem({
     <li className="flex flex-col p-[16px] border-b border-gray-300">
       {!isDetailShow && (
         <div className="flex items-center">
-          <div className="flex items-center flex-auto">
+          <div>
             <img
               width={48}
               height={68}
-              src={thumbnail}
+              src={thumbnail || undefined}
               alt={title}
-              className="object-cover w-[48px] ml-[32px]"
+              className="object-cover w-[48px] max-h-[68px] mx-[32px]"
             />
-            <div className="flex items-center justify-between w-full pr-[56px]">
-              <Typography
-                as="h3"
-                className="flex flex-auto items-center text-text-primary text-[18px] font-bold pl-[48px]"
-              >
-                <span className="inline-block truncate w-full max-w-[250px]">{title}</span>
-                <span className="inline-block pl-[16px] text-text-secondary text-[14px]">
-                  {author}
-                </span>
-              </Typography>
-              <Typography as="p" className="text-text-primary text-[18px]">
-                {price.toLocaleString()}원
-              </Typography>
-            </div>
           </div>
+          <div className="flex items-center justify-between basis-[60%] pr-[56px]">
+            <Typography
+              as="h3"
+              className="flex items-center text-text-primary text-[18px] font-bold"
+            >
+              <span className="inline-block truncate max-w-[200px] tracking-tighter">{title}</span>
+              <span className="inline-block pl-[16px] text-text-secondary text-[14px] tracking-tighter">
+                {author}
+              </span>
+            </Typography>
+            <Typography as="p" className="text-text-primary text-[18px] w-full max-w-[76px]">
+              {price.toLocaleString()}원
+            </Typography>
+          </div>
+
           <div className="flex items-center gap-2">
             <Button label="구매하기" onClick={() => handlePurchaseClick(url)} />
             <Button
@@ -70,7 +71,7 @@ export default function BookItem({
           <img
             width={210}
             height={280}
-            src={thumbnail}
+            src={thumbnail || undefined}
             alt={title}
             className="object-cover w-[210px] h-[280px] mx-[32px]"
           />
@@ -78,11 +79,11 @@ export default function BookItem({
             <div className="flex items-center">
               <Typography
                 as="h3"
-                className="text-[18px] font-bold text-text-primary truncate max-w-[250px]"
+                className="text-[18px] font-bold text-text-primary tracking-tighter"
               >
                 {title}
               </Typography>
-              <Typography className="text-text-secondary text-[14px] pl-[16px]">
+              <Typography className="text-text-secondary text-[14px] pl-[16px] tracking-tighter">
                 {author}
               </Typography>
             </div>

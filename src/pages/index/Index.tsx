@@ -10,14 +10,14 @@ export default function Index() {
     setQuery(query);
   };
 
-  const { data, isError, isLoading } = useBooks({ query });
+  const { data, isError, isLoading, fetchNextPage, isFetchingNextPage } = useBooks({ query });
 
   return (
     <>
-      {isLoading && <Spinner />}
+      {(isLoading || isFetchingNextPage) && <Spinner />}
       <section className="w-full max-w-[960px] m-auto pt-[108px]">
         <SearchBox onSearch={handleSearch} />
-        <SearchResultBox data={data} />
+        <SearchResultBox data={data} onFetchNext={fetchNextPage} />
       </section>
     </>
   );
