@@ -2,17 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { getLocalStorage, setLocalStorage } from '../../../utils/localStorage.utils.ts';
 import { LOCAL_STORAGE_KEYS } from '../../../constants/localStorage.constants.ts';
+import type { BookOnSearch } from '../../../types/bookSearch.types.ts';
 
 interface SearchBoxInputProps {
   placeholder?: string;
   size?: 'sm' | 'md';
-  onSearch: (value: string) => void;
+  onSearch: BookOnSearch;
+  onFocus?: () => void;
 }
 
 export default function SearchBoxInput({
   placeholder = '',
   size = 'md',
   onSearch,
+  onFocus,
 }: SearchBoxInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const boxRef = useRef<HTMLDivElement>(null);
@@ -24,12 +27,13 @@ export default function SearchBoxInput({
   const [isFocused, setIsFocused] = useState(false);
   const handleFocus = () => {
     setIsFocused(true);
+    if (onFocus) onFocus();
   };
 
   const [history, setHistory] = useState<string[]>([]);
   const handleHistoryClick = (item: string) => {
     setQuery(item);
-    onSearch(item);
+    onSearch(item, '');
     inputRef.current?.blur();
     setIsFocused(false);
   };
@@ -43,7 +47,7 @@ export default function SearchBoxInput({
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (query !== '') {
-        onSearch(query);
+        onSearch(query, '');
 
         const updatedHistory = (prev: string[], query: string) => {
           if (prev.includes(query)) {
@@ -109,7 +113,7 @@ export default function SearchBoxInput({
         className={`${baseStyle} ${sizeStyles[size]}`}
       />
       {isFocused && history.length > 0 && (
-        <div className="absolute left-0 right-0 p-[8px] rounded-b-3xl bg-light-gray text-text-subtitle flex flex-col gap-4 pl-[50px] pr-[25px] pb-[28px]">
+        <div className="absolute left-0 right-0 p-[8px] rounded-b-3xl bg-light-gray text-text-subtitle flex flex-col gap-4 pl-[50px] pr-[25px] pb-[28px] z-50">
           {history.map((item) => (
             <p key={item} className="flex items-center justify-between">
               <span className="cursor-pointer" onClick={() => handleHistoryClick(item)}>

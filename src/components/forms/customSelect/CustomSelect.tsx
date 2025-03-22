@@ -2,19 +2,27 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import Typography from '../../typography/Typography.tsx';
 
-interface CustomSelectProps {
-  options: string[];
+interface Option {
+  label: string;
+  value: string;
 }
 
-export default function CustomSelect({ options }: CustomSelectProps) {
-  const [selected, setSelected] = useState(options[0]);
+interface CustomSelectProps {
+  options: Option[];
+  defaultValue: Option;
+  onSelect: (targetValue: Option) => void;
+}
+
+export default function CustomSelect({ options, defaultValue, onSelect }: CustomSelectProps) {
+  const [selected, setSelected] = useState(defaultValue);
   const [isShow, setIsShow] = useState(false);
 
   const handleSelectClick = () => {
     setIsShow(!isShow);
   };
 
-  const handleOptionClick = (targetOption: string) => {
+  const handleOptionClick = (targetOption: Option) => {
+    onSelect(targetOption);
     setSelected(targetOption);
     setIsShow(false);
   };
@@ -26,7 +34,7 @@ export default function CustomSelect({ options }: CustomSelectProps) {
         onClick={handleSelectClick}
       >
         <Typography as="p" className="text-[14px] font-bold">
-          {selected}
+          {selected.label}
         </Typography>
         <ChevronDown color="#B1B8C0" />
       </div>
@@ -34,11 +42,11 @@ export default function CustomSelect({ options }: CustomSelectProps) {
         <ul className="absolute p-[8px] bg-white w-full rounded-sm shadow-lg flex flex-col gap-1 mt-[6px]">
           {options.map((option) => (
             <li
-              key={option}
+              key={option.label}
               className="text-text-secondary cursor-pointer text-[14px]"
               onClick={() => handleOptionClick(option)}
             >
-              {option}
+              {option.label}
             </li>
           ))}
         </ul>
