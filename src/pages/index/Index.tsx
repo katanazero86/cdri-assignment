@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useBooks, UseBooksParams } from '../../hooks/useBooks.ts';
+import { useBooks, UseBooksParams } from '../../hooks/api/useBooks.ts';
 import SearchBox from '../../components/searchBox/SearchBox.tsx';
 import SearchResultBox from '../../components/searchResultBox/SearchResultBox.tsx';
 import Spinner from '../../components/spinner/Spinner.tsx';

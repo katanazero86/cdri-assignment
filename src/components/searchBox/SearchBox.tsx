@@ -3,6 +3,7 @@ import Typography from '../typography/Typography.tsx';
 import Button from '../button/Button.tsx';
 import SearchBoxInput from './searchBoxInput/SearchBoxInput.tsx';
 import DetailSearchModal from '../modals/detailSearchModal/DetailSearchModal.tsx';
+import { useModal } from '../../hooks/useModal.ts';
 import type { BookOnSearch, BookSearchTargetEng } from '../../types/bookSearch.types.ts';
 
 interface SearchBoxProps {
@@ -11,17 +12,16 @@ interface SearchBoxProps {
 
 export default function SearchBox({ onSearch }: SearchBoxProps) {
   const [resetKey, setResetKey] = useState<'general' | 'detail'>('general');
-  const [isOpen, setIsOpen] = useState(false);
-  const [detailSearchParams, setDetailSearchParams] = useState<{
+  const { isOpen, handleClose, toggleModal, updateModalData, modalData } = useModal<{
     query: string;
     target: BookSearchTargetEng;
   }>({
     query: '',
-    target: '',
+    target: 'title',
   });
 
   const handleGeneralSearch = (query: string, target: BookSearchTargetEng) => {
-    setDetailSearchParams({
+    updateModalData({
       query: '',
       target: '',
     });
@@ -31,15 +31,11 @@ export default function SearchBox({ onSearch }: SearchBoxProps) {
   };
 
   const handleDetailSearchClick = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
+    toggleModal();
   };
 
   const handleDetailSearch = (query: string, target: BookSearchTargetEng) => {
-    setDetailSearchParams({ query, target });
+    updateModalData({ query, target });
     onSearch(query, target);
     handleClose();
     setResetKey('detail');
@@ -66,7 +62,7 @@ export default function SearchBox({ onSearch }: SearchBoxProps) {
           <DetailSearchModal
             onClose={handleClose}
             onSearch={handleDetailSearch}
-            defaultValues={detailSearchParams}
+            defaultValues={modalData!}
           />
         </div>
       )}

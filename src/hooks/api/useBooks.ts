@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { api } from '../apis';
-import type { BookSearchTargetEng } from '../types/bookSearch.types.ts';
+import { api } from '../../apis';
+import type { BookSearchTargetEng } from '../../types/bookSearch.types.ts';
 const QUERY_KEY = ['books'];
 
 export interface UseBooksParams {
