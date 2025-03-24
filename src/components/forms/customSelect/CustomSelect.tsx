@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import Typography from '../../typography/Typography.tsx';
 
@@ -14,6 +14,7 @@ interface CustomSelectProps {
 }
 
 export default function CustomSelect({ options, defaultValue, onSelect }: CustomSelectProps) {
+  const ref = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState(defaultValue);
   const [isShow, setIsShow] = useState(false);
 
@@ -27,8 +28,21 @@ export default function CustomSelect({ options, defaultValue, onSelect }: Custom
     setIsShow(false);
   };
 
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setIsShow(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="w-full relative">
+    <div className="w-full relative" ref={ref}>
       <div
         className="border-b-1 border-gray-300 h-[50px] p-[8px] flex items-center justify-between cursor-pointer"
         onClick={handleSelectClick}

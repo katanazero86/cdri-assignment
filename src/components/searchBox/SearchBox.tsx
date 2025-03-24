@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Typography from '../typography/Typography.tsx';
 import Button from '../button/Button.tsx';
 import SearchBoxInput from './searchBoxInput/SearchBoxInput.tsx';
 import DetailSearchModal from '../modals/detailSearchModal/DetailSearchModal.tsx';
@@ -43,9 +42,6 @@ export default function SearchBox({ onSearch }: SearchBoxProps) {
 
   return (
     <div className="flex flex-col w-full max-w-[568px]">
-      <Typography as="h2" className="font-bold text-text-primary text-[22px]">
-        검색 결과
-      </Typography>
       <div className="flex items-center gap-4 pt-[16px]">
         <div className="flex-auto">
           <SearchBoxInput

@@ -1,13 +1,14 @@
 import Typography from '../../typography/Typography.tsx';
 
-interface SearchResultTextProps {
+interface BookResultTitleProps {
+  text: string;
   total?: number;
 }
 
-export default function SearchResultText({ total = 0 }: SearchResultTextProps) {
+export default function BookResultTitle({ text, total = 0 }: BookResultTitleProps) {
   return (
     <Typography as="p" className="text-text-primary">
-      도서 검색 결과{' '}
+      {text}{' '}
       <span className="pl-[16px]">
         총 <span className="text-primary">{total?.toLocaleString()}</span>건
       </span>
