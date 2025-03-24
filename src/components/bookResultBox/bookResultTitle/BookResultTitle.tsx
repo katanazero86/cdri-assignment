@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Typography from '../../typography/Typography.tsx';
 
 interface BookResultTitleProps {
@@ -5,7 +6,7 @@ interface BookResultTitleProps {
   total?: number;
 }
 
-export default function BookResultTitle({ text, total = 0 }: BookResultTitleProps) {
+function BookResultTitle({ text, total = 0 }: BookResultTitleProps) {
   return (
     <Typography as="p" className="text-text-primary">
       {text}{' '}
@@ -15,3 +16,5 @@ export default function BookResultTitle({ text, total = 0 }: BookResultTitleProp
     </Typography>
   );
 }
+
+export default memo(BookResultTitle);
