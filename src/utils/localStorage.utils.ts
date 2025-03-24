@@ -13,8 +13,14 @@ const validLocalStorage = (key: string) => {
 };
 
 export const setLocalStorage = (key: string, value: object) => {
-  if (!validLocalStorage(key)) return;
-  localStorage.setItem(key, JSON.stringify(value));
+  if (!validLocalStorage(key)) return false;
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.error('Local storage quota exceeded', e);
+    return false;
+  }
+  return true;
 };
 
 export const getLocalStorage = (key: string) => {

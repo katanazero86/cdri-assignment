@@ -6,13 +6,26 @@ import LikeFill from '../../../../assets/icons/like_fill_icon.svg';
 import LikeLine from '../../../../assets/icons/like_line_icon.svg';
 
 interface BookItemProps extends Response.BookDocument {
-  onClickLike?: () => void;
+  onClickLike: (targetBook: Response.BookDocument) => void;
   likes: Response.BookDocument[];
 }
 
-export default function BookItem(props: BookItemProps) {
-  const { price, title, authors, thumbnail, contents, sale_price, url, isbn, onClickLike, likes } =
-    props;
+export default function BookItem({
+  price,
+  title,
+  authors,
+  thumbnail,
+  contents,
+  sale_price,
+  url,
+  isbn,
+  dateTime,
+  publisher,
+  translators,
+  status,
+  onClickLike,
+  likes,
+}: BookItemProps) {
   const author = `${authors[0]}${authors.length > 1 ? ` 외 ${authors.length}명` : ''}`;
 
   const [isDetailShow, setIsDetailShow] = useState(false);
@@ -23,6 +36,23 @@ export default function BookItem(props: BookItemProps) {
 
   const handlePurchaseClick = () => {
     window.open(url, '_blank');
+  };
+
+  const handleLikeClick = () => {
+    onClickLike({
+      title,
+      contents,
+      url,
+      isbn,
+      dateTime,
+      authors,
+      publisher,
+      translators,
+      price,
+      sale_price,
+      thumbnail,
+      status,
+    });
   };
 
   return (
@@ -43,7 +73,7 @@ export default function BookItem(props: BookItemProps) {
               src={`${likes.some((item) => item.isbn === isbn) ? LikeFill : LikeLine}`}
               alt={'like-icon'}
               className="absolute top-0 right-8 cursor-pointer"
-              onClick={onClickLike}
+              onClick={handleLikeClick}
             />
           </div>
           <div className="flex items-center justify-between basis-[60%] pr-[56px]">
@@ -91,7 +121,7 @@ export default function BookItem(props: BookItemProps) {
               src={`${likes.some((item) => item.isbn === isbn) ? LikeFill : LikeLine}`}
               alt={'like-icon'}
               className="absolute top-[12px] right-[40px] cursor-pointer"
-              onClick={onClickLike}
+              onClick={handleLikeClick}
             />
           </div>
           <div className="flex flex-col basis-[360px]">

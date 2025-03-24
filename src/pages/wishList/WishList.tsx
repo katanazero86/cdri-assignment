@@ -3,36 +3,38 @@ import BookResultBox from '../../components/bookResultBox/BookResultBox.tsx';
 import BookResultTitle from '../../components/bookResultBox/bookResultTitle/BookResultTitle.tsx';
 import NoBooks from '../../components/bookResultBox/noBooks/NoBooks.tsx';
 import Typography from '../../components/typography/Typography.tsx';
-import { getLocalStorage } from '../../utils/localStorage.utils.ts';
-import { LOCAL_STORAGE_KEYS } from '../../constants/localStorage.constants.ts';
+import { useLike } from '../../hooks/useLike.ts';
 
 const SIZE = 10;
 
 export default function WishList() {
-  const [page, setPage] = useState(1);
-  const [data, setData] = useState<Response.BookDocument[] | null>(null);
-  const [visibleData, setVisibleData] = useState<Response.BookDocument[] | null>(null);
+  const { likes, handleLikeClick } = useLike();
+  const [visibleData, setVisibleData] = useState<Response.BookDocument[]>([]);
 
   const handleFetchNext = () => {
-    const start = page * SIZE;
-    const end = (page + 1) * SIZE;
+    const start = visibleData.length;
+    const end = visibleData.length + SIZE;
 
-    const nextSlice = data!.slice(start, end);
-    setVisibleData((prev) => [...prev!, ...nextSlice]);
-    setPage(page + 1);
+    const nextSlice = likes.slice(start, end);
+    console.log(nextSlice);
+    setVisibleData((prev) => [...prev, ...nextSlice]);
   };
 
   useEffect(() => {
-    const wishBooks = getLocalStorage(LOCAL_STORAGE_KEYS.LIKE);
-    if (wishBooks) {
-      const parsed = JSON.parse(wishBooks);
-      setData(JSON.parse(wishBooks));
-      setVisibleData(parsed.slice(0, SIZE));
+    if (likes.length > 0) {
+      if (visibleData.length === 0) {
+        setVisibleData(likes.slice(0, SIZE));
+      } else {
+        const updatedVisible = visibleData.filter((book) =>
+          likes.some((like) => like.isbn === book.isbn),
+        );
+        setVisibleData(updatedVisible);
+      }
     }
-  }, []);
+  }, [likes]);
 
-  const total = data?.length ?? 0;
-  const isEnd = data !== null && visibleData !== null && visibleData?.length >= data?.length;
+  const total = likes.length;
+  const isEnd = visibleData.length >= likes.length;
 
   return (
     <section className="w-full max-w-[960px] m-auto pt-[108px]">
@@ -41,8 +43,10 @@ export default function WishList() {
       </Typography>
       <BookResultBox
         data={visibleData}
-        total={total}
         isEnd={isEnd}
+        total={total}
+        likes={likes}
+        onClickLike={handleLikeClick}
         onFetchNext={handleFetchNext}
         renderTitle={() => <BookResultTitle text="찜한 책" total={total} />}
         renderEmpty={() => <NoBooks text="찜한 책이 없습니다." />}

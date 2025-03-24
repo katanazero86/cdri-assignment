@@ -18,7 +18,7 @@ export default function Header() {
 
   return (
     <header className="h-[80px] bg-white px-[160px] py-[24px] flex items-center relative">
-      <Typography as="h1" className="font-bold text-text-primary text-[24px]">
+      <Typography as="h1" className="font-bold text-text-primary text-[24px] cursor-pointer">
         CERTICOS BOOKS
       </Typography>
       <nav className="absolute left-1/2 flex items-center">

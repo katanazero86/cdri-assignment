@@ -9,8 +9,10 @@ import Typography from '../../components/typography/Typography.tsx';
 import BookResultBox from '../../components/bookResultBox/BookResultBox.tsx';
 import BookResultTitle from '../../components/bookResultBox/bookResultTitle/BookResultTitle.tsx';
 import NoBooks from '../../components/bookResultBox/noBooks/NoBooks.tsx';
+import { useLike } from '../../hooks/useLike.ts';
 
 export default function Index() {
+  const { likes, handleLikeClick } = useLike();
   const [bookSearch, setBookSearch] = useState<UseBooksParams>({
     query: '',
     target: '',
@@ -50,7 +52,7 @@ export default function Index() {
 
   const total = data?.pages[0]?.meta.total_count ?? 0;
   const isEnd = data?.pages[data.pages.length - 1].meta.is_end ?? false;
-  const targetData = data?.pages.flatMap((page) => page.documents) ?? null;
+  const targetData = data?.pages.flatMap((page) => page.documents) ?? [];
 
   return (
     <>
@@ -65,6 +67,8 @@ export default function Index() {
           onFetchNext={fetchNextPage}
           isEnd={isEnd}
           total={total}
+          likes={likes}
+          onClickLike={handleLikeClick}
           renderTitle={() => <BookResultTitle text="도서 검색 결과" total={total} />}
           renderEmpty={() => <NoBooks text="검색된 결과가 없습니다." />}
         />
