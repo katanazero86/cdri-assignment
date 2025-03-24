@@ -1,9 +1,8 @@
 import BookList from './bookList/BookList.tsx';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver.ts';
-import type { InfiniteData } from '@tanstack/react-query';
 
 interface BookResultBoxProps {
-  data?: InfiniteData<Response.BookResponse> | undefined;
+  data?: Response.BookDocument[] | null;
   total?: number;
   isEnd?: boolean;
   onFetchNext: VoidFunction;
@@ -12,7 +11,7 @@ interface BookResultBoxProps {
 }
 
 export default function BookResultBox({
-  data,
+  data = null,
   total = 0,
   isEnd = false,
   renderTitle,

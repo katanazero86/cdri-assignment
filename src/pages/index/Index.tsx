@@ -50,6 +50,7 @@ export default function Index() {
 
   const total = data?.pages[0]?.meta.total_count ?? 0;
   const isEnd = data?.pages[data.pages.length - 1].meta.is_end ?? false;
+  const targetData = data?.pages.flatMap((page) => page.documents) ?? null;
 
   return (
     <>
@@ -60,7 +61,7 @@ export default function Index() {
         </Typography>
         <SearchBox onSearch={handleSearch} />
         <BookResultBox
-          data={data}
+          data={targetData}
           onFetchNext={fetchNextPage}
           isEnd={isEnd}
           total={total}
