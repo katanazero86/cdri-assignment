@@ -6,20 +6,33 @@ import Typography from '../../components/typography/Typography.tsx';
 import { getLocalStorage } from '../../utils/localStorage.utils.ts';
 import { LOCAL_STORAGE_KEYS } from '../../constants/localStorage.constants.ts';
 
+const SIZE = 10;
+
 export default function WishList() {
-  const [targetData, setTargetData] = useState<Response.BookDocument[] | null>(null);
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState<Response.BookDocument[] | null>(null);
+  const [visibleData, setVisibleData] = useState<Response.BookDocument[] | null>(null);
+
+  const handleFetchNext = () => {
+    const start = page * SIZE;
+    const end = (page + 1) * SIZE;
+
+    const nextSlice = data!.slice(start, end);
+    setVisibleData((prev) => [...prev!, ...nextSlice]);
+    setPage(page + 1);
+  };
 
   useEffect(() => {
     const wishBooks = getLocalStorage(LOCAL_STORAGE_KEYS.LIKE);
-    console.log(wishBooks);
     if (wishBooks) {
-      setTargetData(JSON.parse(wishBooks));
-    } else {
-      setTargetData(null);
+      const parsed = JSON.parse(wishBooks);
+      setData(JSON.parse(wishBooks));
+      setVisibleData(parsed.slice(0, SIZE));
     }
   }, []);
 
-  const total = targetData?.length ?? 0;
+  const total = data?.length ?? 0;
+  const isEnd = data !== null && visibleData !== null && visibleData?.length >= data?.length;
 
   return (
     <section className="w-full max-w-[960px] m-auto pt-[108px]">
@@ -27,10 +40,11 @@ export default function WishList() {
         내가 찜한 책
       </Typography>
       <BookResultBox
-        data={targetData}
+        data={visibleData}
         total={total}
-        onFetchNext={() => null}
-        renderTitle={() => <BookResultTitle text="찜한 책" />}
+        isEnd={isEnd}
+        onFetchNext={handleFetchNext}
+        renderTitle={() => <BookResultTitle text="찜한 책" total={total} />}
         renderEmpty={() => <NoBooks text="찜한 책이 없습니다." />}
       />
     </section>

@@ -7,7 +7,11 @@ export default function Header() {
   const navigate = useNavigate();
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
     e.preventDefault();
-    navigate(path);
+    if (location.pathname === path) {
+      window.location.reload();
+    } else {
+      navigate(path);
+    }
   };
 
   const activeStyles = `after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-primary after:content-['']`;
