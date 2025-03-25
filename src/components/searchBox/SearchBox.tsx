@@ -54,7 +54,7 @@ export default function SearchBox({ onSearch }: SearchBoxProps) {
         <Button label="상세검색" onClick={handleDetailSearchClick} variant="outlined" size="sm" />
       </div>
       {isOpen && (
-        <div className="mt-4">
+        <div className="mt-4 starting:opacity-0 transition-opacity duration-250 ease-out opacity-100">
           <DetailSearchModal
             onClose={handleClose}
             onSearch={handleDetailSearch}

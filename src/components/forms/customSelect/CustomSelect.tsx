@@ -53,7 +53,7 @@ export default function CustomSelect({ options, defaultValue, onSelect }: Custom
         <ChevronDown color="#B1B8C0" />
       </div>
       {isShow && (
-        <ul className="absolute p-[8px] bg-white w-full rounded-sm shadow-lg flex flex-col gap-1 mt-[6px]">
+        <ul className="absolute p-[8px] bg-white w-full rounded-sm shadow-lg flex flex-col gap-1 mt-[6px] starting:opacity-0 transition-opacity duration-250 ease-out opacity-100">
           {options.map((option) => (
             <li
               key={option.label}
