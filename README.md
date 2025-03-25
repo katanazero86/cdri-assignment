@@ -19,6 +19,7 @@
 3. .env 를 프로젝트 최상위 경로에 포함
 4. 개발 모드 실행 `npm run dev`
 5. 실행 후, 경로는 `/` 와 `wish-list` 로 확인(ex: http://localhost:5173/)
+6. (or) 빌드 후(`npm run build`), 로컬 서버에서 미리보기 실행(`npm run preview)`하기.
 
 ```
 # 환경변수 (.env)
