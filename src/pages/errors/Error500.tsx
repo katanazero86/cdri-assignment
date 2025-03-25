@@ -1,3 +1,4 @@
+// 참조: https://flowbite.com/blocks/marketing/500/
 export default function Error500() {
   return (
     <section className="bg-white">

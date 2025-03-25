@@ -1,3 +1,4 @@
+// 참조: https://flowbite.com/blocks/marketing/404/
 export default function Error404() {
   return (
     <section className="bg-white">
