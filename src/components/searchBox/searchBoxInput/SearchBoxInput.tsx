@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { getLocalStorage, setLocalStorage } from '../../../utils/localStorage.utils.ts';
+import { useOutsideClick } from '../../../hooks/useOutsideClick.ts';
 import { LOCAL_STORAGE_KEYS } from '../../../constants/localStorage.constants.ts';
 import type { BookOnSearch } from '../../../types/bookSearch.types.ts';
 
@@ -18,11 +19,11 @@ export default function SearchBoxInput({
   onFocus,
 }: SearchBoxInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const boxRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
+  const { containerRef } = useOutsideClick(() => setIsFocused(false));
 
   const [isFocused, setIsFocused] = useState(false);
   const handleFocus = () => {
@@ -67,19 +68,6 @@ export default function SearchBoxInput({
   };
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (boxRef.current && !boxRef.current.contains(e.target as Node)) {
-        setIsFocused(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
     const targetHistory = getLocalStorage(LOCAL_STORAGE_KEYS.SEARCH);
     if (targetHistory) setHistory(JSON.parse(targetHistory));
   }, []);
@@ -98,7 +86,7 @@ export default function SearchBoxInput({
   };
 
   return (
-    <div className="relative w-full" ref={boxRef}>
+    <div className="relative w-full" ref={containerRef}>
       <div className={`${iconBoxBaseStyles} ${sizeStylesWithIcon[size]}`}>
         <Search />
       </div>

@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import Typography from '../../typography/Typography.tsx';
+import { useOutsideClick } from '../../../hooks/useOutsideClick.ts';
 
 interface Option {
   label: string;
@@ -14,9 +15,9 @@ interface CustomSelectProps {
 }
 
 export default function CustomSelect({ options, defaultValue, onSelect }: CustomSelectProps) {
-  const ref = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState(defaultValue);
   const [isShow, setIsShow] = useState(false);
+  const { containerRef } = useOutsideClick(() => setIsShow(false));
 
   const handleSelectClick = () => {
     setIsShow(!isShow);
@@ -28,21 +29,8 @@ export default function CustomSelect({ options, defaultValue, onSelect }: Custom
     setIsShow(false);
   };
 
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setIsShow(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   return (
-    <div className="w-full relative" ref={ref}>
+    <div className="w-full relative" ref={containerRef}>
       <div
         className="border-b-1 border-gray-300 h-[50px] p-[8px] flex items-center justify-between cursor-pointer"
         onClick={handleSelectClick}
